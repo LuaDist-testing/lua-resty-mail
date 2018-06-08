@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: nickblah/lua-resty-mail-test:latest
+    steps:
+      - checkout
+      - run: make test
+      # Run the external integration tests, but only on non-forked PRs.
+      - run: |
+          if [ -z "$CIRCLE_PR_USERNAME" ]; then
+            make test_integration_external
+          fi
